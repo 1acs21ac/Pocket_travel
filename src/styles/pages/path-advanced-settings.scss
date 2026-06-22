@@ -1,0 +1,19 @@
+@use '../variables.scss' as *;
+
+.page-path-advanced-settings {
+  @extend .ptc-page;
+  padding-bottom: 220rpx;
+}
+
+.advanced-section {
+  @extend .card;
+}
+
+.segment-two {
+  display: flex;
+  gap: $space-2;
+}
+
+.segment-two > view {
+  flex: 1;
+}

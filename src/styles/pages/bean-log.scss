@@ -1,0 +1,12 @@
+@use '../variables.scss' as *;
+
+.page-bean-log {
+  @extend .ptc-page;
+}
+
+.bean-log-item {
+  @extend .card;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}

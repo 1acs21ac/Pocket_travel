@@ -1,0 +1,7 @@
+{
+  "watch": ["src", "package.json"],
+  "ignore": ["node_modules", "dist", "../dist", "../../dist", "**/*.test.js", "**/*.spec.js"],
+  "ext": "js,json",
+  "delay": "1000",
+  "restartable": "rs"
+}

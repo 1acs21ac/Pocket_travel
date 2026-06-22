@@ -1,0 +1,11 @@
+@use '../variables.scss' as *;
+
+.page-import-link {
+  @extend .ptc-page;
+  padding-bottom: 220rpx;
+}
+
+.link-field {
+  @extend .field;
+  min-height: 112rpx;
+}

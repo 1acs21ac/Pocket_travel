@@ -1,0 +1,17 @@
+@use '../variables.scss' as *;
+
+.page-spot-detail {
+  @extend .ptc-page;
+  padding-bottom: 220rpx;
+}
+
+.spot-gallery {
+  height: 360rpx;
+  border-radius: $radius-md;
+  background: #f0f0f0;
+}
+
+.spot-meta,
+.spot-comment {
+  @extend .card;
+}

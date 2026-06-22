@@ -1,0 +1,16 @@
+@use '../variables.scss' as *;
+
+.page-checkin-photo {
+  @extend .ptc-page;
+  padding-bottom: 220rpx;
+}
+
+.photo-uploader {
+  @extend .card;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: $space-2;
+}

@@ -1,0 +1,21 @@
+@use '../variables.scss' as *;
+
+.page-message {
+  @extend .ptc-page;
+}
+
+.message-item {
+  @extend .card;
+}
+
+.message-badge {
+  min-width: 36rpx;
+  height: 36rpx;
+  padding: 0 10rpx;
+  border-radius: $radius-pill;
+  background: $color-danger;
+  color: $color-white;
+  font-size: $font-size-xs;
+  line-height: 36rpx;
+  text-align: center;
+}

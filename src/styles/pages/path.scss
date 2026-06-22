@@ -1,0 +1,16 @@
+@use '../variables.scss' as *;
+
+.page-path {
+  @extend .ptc-page;
+  padding-bottom: 180rpx;
+}
+
+.path-actions {
+  display: flex;
+  gap: $space-2;
+}
+
+.path-current-trip {
+  @extend .card;
+  background: linear-gradient(180deg, #fff2e6 0%, $color-white 100%);
+}

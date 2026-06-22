@@ -1,0 +1,16 @@
+@use '../variables.scss' as *;
+
+.page-spot-share-poster {
+  @extend .ptc-page;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, $color-secondary-yellow-light 0%, #fff 100%);
+}
+
+.poster-card {
+  width: 620rpx;
+  padding: $space-3;
+  border-radius: $radius-lg;
+  background: $color-white;
+  box-shadow: $shadow-card;
+}

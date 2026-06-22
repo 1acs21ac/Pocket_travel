@@ -1,0 +1,16 @@
+@use '../variables.scss' as *;
+
+.page-loading {
+  @extend .ptc-page;
+  align-items: center;
+  justify-content: center;
+  gap: $space-4;
+  background: linear-gradient(180deg, $color-secondary-yellow-light 0%, $color-white 100%);
+}
+
+.loading-buddy {
+  width: 240rpx;
+  height: 240rpx;
+  border-radius: 50%;
+  background: $color-secondary-yellow;
+}

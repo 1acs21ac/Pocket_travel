@@ -1,0 +1,17 @@
+@use '../variables.scss' as *;
+
+.page-me {
+  @extend .ptc-page;
+  padding-bottom: 180rpx;
+}
+
+.me-asset-card {
+  @extend .card;
+  background: linear-gradient(180deg, #fff2e6 0%, #ffffff 100%);
+}
+
+.me-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-2;
+}

@@ -1,0 +1,12 @@
+@use '../variables.scss' as *;
+
+.page-tag-setting {
+  @extend .ptc-page;
+  gap: $space-3;
+}
+
+.tag-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+}

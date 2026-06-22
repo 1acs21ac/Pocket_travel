@@ -1,0 +1,17 @@
+@use '../variables.scss' as *;
+
+.page-explore {
+  @extend .ptc-page;
+  padding-bottom: 180rpx;
+}
+
+.explore-status {
+  @extend .card;
+  gap: $space-1;
+}
+
+.explore-waterfall {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-2;
+}

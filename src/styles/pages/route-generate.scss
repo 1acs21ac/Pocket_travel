@@ -1,0 +1,18 @@
+@use '../variables.scss' as *;
+
+.page-route-generate {
+  @extend .ptc-page;
+  padding-bottom: 220rpx;
+}
+
+.route-map {
+  height: 400rpx;
+  border-radius: $radius-md;
+  background: $color-secondary-green-light;
+}
+
+.route-steps {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}

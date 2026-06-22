@@ -1,0 +1,17 @@
+@use '../variables.scss' as *;
+
+.page-mood-qa {
+  @extend .ptc-page;
+  gap: $space-3;
+}
+
+.mood-question-card {
+  @extend .card;
+  border-radius: $radius-lg;
+}
+
+.mood-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+}

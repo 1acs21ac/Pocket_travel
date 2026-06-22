@@ -1,0 +1,16 @@
+@use '../variables.scss' as *;
+
+.page-comments-all {
+  @extend .ptc-page;
+  padding-bottom: 180rpx;
+}
+
+.comment-item {
+  @extend .card;
+}
+
+.comment-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: $space-1;
+}

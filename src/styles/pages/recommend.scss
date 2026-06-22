@@ -1,0 +1,16 @@
+@use '../variables.scss' as *;
+
+.page-recommend {
+  @extend .ptc-page;
+  padding-bottom: 180rpx;
+}
+
+.recommend-map {
+  height: 320rpx;
+  border-radius: $radius-md;
+  background: $color-secondary-green-light;
+}
+
+.recommend-item {
+  @extend .card;
+}

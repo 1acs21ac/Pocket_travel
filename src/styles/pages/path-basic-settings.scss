@@ -1,0 +1,16 @@
+@use '../variables.scss' as *;
+
+.page-path-basic-settings {
+  @extend .ptc-page;
+  padding-bottom: 220rpx;
+}
+
+.setting-block {
+  @extend .card;
+}
+
+.setting-option-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+}
