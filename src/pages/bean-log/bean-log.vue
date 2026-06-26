@@ -21,7 +21,7 @@
       <view v-for="item in logs" v-else :key="String(item.id)" class="log-row">
         <view>
           <text class="reason">{{ item.reason }}</text>
-          <text class="date">{{ formatDate(item.created_at) }}</text>
+          <text class="date">{{ formatDate(item.createdAt) }}</text>
         </view>
         <text class="delta" :class="{ plus: item.delta > 0 }">
           {{ item.delta > 0 ? '+' : '' }}{{ item.delta }}
@@ -42,7 +42,7 @@ interface BeanLog {
   id: number | string
   delta: number
   reason: string
-  created_at: string
+  createdAt: string
 }
 
 const beanStore = useBeanStore()
@@ -87,9 +87,25 @@ async function loadLogs() {
   }
 }
 
-function formatDate(value: string) {
-  if (!value) return ''
-  return String(value).slice(0, 16).replace('T', ' ')
+function formatDate(dateStr: string) {
+  if (!dateStr) return ''
+  // 兼容 MySQL DATETIME 格式 (2026-06-26T10:25:00 或 2026-06-26 10:25:00)
+  const isoString = dateStr.replace(' ', 'T')
+  const date = new Date(isoString)
+  if (isNaN(date.getTime())) return dateStr
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+  if (diffDays === 0) {
+    return `今天 ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+  } else if (diffDays === 1) {
+    return `昨天 ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+  } else if (diffDays < 7) {
+    return `${diffDays}天前`
+  } else {
+    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
+  }
 }
 </script>
 
