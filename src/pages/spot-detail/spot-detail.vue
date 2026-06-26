@@ -7,7 +7,13 @@
         <view class="cover" />
         <text class="spot-title">{{ spot.name || '未命名景点' }}</text>
         <text class="spot-line">坐标：{{ formatCoord(spot.lat) }}, {{ formatCoord(spot.lng) }}</text>
-        <text v-if="spot.address" class="spot-line address-link" @tap="openMapNavigation">地址：{{ spot.address }}</text>
+        <text
+          v-if="spot.address && spot.address !== '地址待补充'"
+          class="spot-line address-link"
+          @tap="openMapNavigation"
+          >地址：{{ spot.address }}</text
+        >
+        <text v-else class="spot-line address-link" @tap="chooseAddress">地址：地址待补充（点击补充）</text>
         <text v-if="weatherText" class="spot-line">{{ weatherText }}</text>
         <text v-if="crowdText" class="spot-line">{{ crowdText }}</text>
       </view>
@@ -267,6 +273,17 @@ function openMapNavigation() {
     longitude: Number(current.lng),
     name: current.name || '景点',
     address: current.address || ''
+  })
+}
+
+async function chooseAddress() {
+  if (!spot.value || !spotIdRef.value) return
+  uni.navigateTo({
+    url:
+      `/pages/address-select/address-select?spotId=${encodeURIComponent(spotIdRef.value)}` +
+      `&spotName=${encodeURIComponent(spot.value.name || '')}` +
+      `&lat=${encodeURIComponent(String(spot.value.lat || ''))}` +
+      `&lng=${encodeURIComponent(String(spot.value.lng || ''))}`
   })
 }
 

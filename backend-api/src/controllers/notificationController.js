@@ -20,7 +20,7 @@ export async function getNotifications(ctx) {
     type: row.type,
     title: row.title,
     body: row.content,
-    payload: row.payload_json ? JSON.parse(row.payload_json) : {},
+    payload: typeof row.payload_json === 'string' ? JSON.parse(row.payload_json) : (row.payload_json || {}),
     isRead: Boolean(row.readAt),
     createdAt: row.createdAt
   }))

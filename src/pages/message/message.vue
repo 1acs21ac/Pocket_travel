@@ -56,11 +56,7 @@ async function loadMessages() {
       unread: !item.isRead
     }))
   } catch {
-    messages.value = [
-      { id: 1, title: '豆子到账', body: '你今天完成了情绪更新，已获得5豆子。', time: '今天 09:20', unread: false },
-      { id: 2, title: '评论有新点赞', body: '你在「林间步道」的评论被同频用户点赞。', time: '昨天 20:14', unread: false },
-      { id: 3, title: '路线分享可查看', body: '分享图已生成，好友扫码后可进入对应路线或景点。', time: '周三 16:08', unread: false }
-    ]
+    messages.value = []
   } finally {
     loading.value = false
   }

@@ -9,6 +9,7 @@ import { errorMiddleware } from './utils/errorMiddleware.js'
 import { logger } from './utils/logger.js'
 import { initDb } from './models/db.js'
 import { startSchedulers } from './utils/scheduler.js'
+import { seedSpots } from './models/seed.js'
 
 dotenv.config()
 
@@ -44,7 +45,13 @@ const allowStartWithoutDb =
   process.env.ALLOW_START_WITHOUT_DB === 'true' || process.env.NODE_ENV !== 'production'
 
 initDb()
-  .then(() => {
+  .then(async () => {
+    // 初始化示例景点数据
+    try {
+      await seedSpots()
+    } catch (e) {
+      logger.warn('景点数据初始化失败:', e.message)
+    }
     startSchedulers()
     app.listen(port, () => {
       logger.info(`backend-api started at http://127.0.0.1:${port}`)

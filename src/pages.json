@@ -89,6 +89,12 @@
       "style": {
         "navigationBarTitleText": "分享图生成"
       }
+    },
+    {
+      "path": "pages/address-select/address-select",
+      "style": {
+        "navigationStyle": "custom"
+      }
     }
   ],
   "tabBar": {

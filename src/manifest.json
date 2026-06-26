@@ -11,6 +11,7 @@
         "desc": "用于路线规划与打卡 GPS 校验"
       }
     },
-    "requiredPrivateInfos": ["getLocation"]
+    "requiredPrivateInfos": ["getLocation", "chooseLocation"],
+    "urlCheck": false
   }
 }

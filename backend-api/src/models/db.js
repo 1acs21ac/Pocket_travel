@@ -20,7 +20,9 @@ export async function initDb() {
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
-      namedPlaceholders: false
+      namedPlaceholders: false,
+      timezone: '+08:00',
+      dateStrings: false
     })
     await pool.query('SELECT 1')
   } catch (error) {
@@ -33,7 +35,8 @@ export async function initDb() {
       password,
       database: process.env.DB_BOOTSTRAP_DATABASE || undefined,
       waitForConnections: true,
-      connectionLimit: 2
+      connectionLimit: 2,
+      timezone: '+08:00'
     })
     try {
       await bootstrapPool.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\``)
@@ -49,7 +52,9 @@ export async function initDb() {
       database: dbName,
       waitForConnections: true,
       connectionLimit: 10,
-      queueLimit: 0
+      queueLimit: 0,
+      timezone: '+08:00',
+      dateStrings: false
     })
     await pool.query('SELECT 1')
   }

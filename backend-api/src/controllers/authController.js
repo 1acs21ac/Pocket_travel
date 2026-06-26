@@ -14,7 +14,6 @@ export async function wechatLogin(ctx) {
   let isNewUser = false
 
   if (!user) {
-    // 新用户：使用传入的昵称和头像，或使用默认值
     user = await createUser({
       openid: session.openid,
       nickname: nickname || '旅行搭子',
@@ -22,10 +21,8 @@ export async function wechatLogin(ctx) {
     })
     isNewUser = true
   } else {
-    // 已注册用户同步头像和昵称（如果传入的话）
     if (nickname || avatarUrl) {
       await updateUserAvatar(user.id, nickname, avatarUrl)
-      // 更新 user 对象中的值
       user.nickname = nickname || user.nickname
       user.avatar_url = avatarUrl || user.avatar_url
     }

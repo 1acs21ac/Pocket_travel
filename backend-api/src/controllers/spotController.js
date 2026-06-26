@@ -9,7 +9,8 @@ import {
   getComments,
   ensureSpotExists,
   getSpotList,
-  likeCommentTx
+  likeCommentTx,
+  updateSpotAddress
 } from '../models/spotModel.js'
 import { beanRule, clampBeanBalance } from '../utils/beanRule.js'
 import { getDb } from '../models/db.js'
@@ -134,6 +135,7 @@ export async function createSpotComment(ctx) {
   const commentId = await createComment({ userId, spotId: spot.id, rating, content, images, tags, moodTags })
 
   let rewardBeans = 0
+  let rewardGranted = false
   const connection = await getDb().getConnection()
   try {
     await connection.beginTransaction()
@@ -149,6 +151,9 @@ export async function createSpotComment(ctx) {
     if (rewardBeans > 0) {
       await updateBeanBalanceTx(connection, userId, nextBalance)
       await addBeanLog(connection, { userId, delta: rewardBeans, reason: '评论奖励' })
+      rewardGranted = true
+    }
+    if (rewardGranted) {
       await createNotificationTx(connection, {
         recipientUserId: userId,
         notificationType: 'comment_reward',
@@ -165,7 +170,7 @@ export async function createSpotComment(ctx) {
     connection.release()
   }
 
-  ok(ctx, { commentId, rewardBeans, rewardGranted: rewardBeans > 0 })
+  ok(ctx, { commentId, rewardBeans, rewardGranted })
 }
 
 export async function listSpotComments(ctx) {
@@ -202,4 +207,13 @@ export async function markSpotFavorite(ctx) {
   await resolveSpot(spotId)
   await favoriteSpot(userId, spotId)
   ok(ctx, { spotId, favorited: true })
+}
+
+export async function updateSpotAddressController(ctx) {
+  const spotId = Number(ctx.params.spotId)
+  requireFields(ctx.request.body, ['address'])
+  const { address } = ctx.request.body
+  await resolveSpot(spotId)
+  await updateSpotAddress(spotId, address)
+  ok(ctx, { spotId, address })
 }

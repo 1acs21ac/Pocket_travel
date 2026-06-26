@@ -7,7 +7,8 @@ import {
   likeSpotComment,
   listSpotComments,
   listSpots,
-  markSpotFavorite
+  markSpotFavorite,
+  updateSpotAddressController
 } from '../controllers/spotController.js'
 
 const router = new Router({ prefix: '/api/v1/spots' })
@@ -15,6 +16,7 @@ const router = new Router({ prefix: '/api/v1/spots' })
 router.use(authMiddleware)
 router.get('/', listSpots)
 router.get('/:spotId', getSpotDetail)
+router.put('/:spotId/address', updateSpotAddressController)
 router.post('/:spotId/favorite', markSpotFavorite)
 router.post('/:spotId/checkins', createSpotCheckin)
 router.post('/:spotId/comments', createSpotComment)

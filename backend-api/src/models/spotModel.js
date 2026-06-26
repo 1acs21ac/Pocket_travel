@@ -205,7 +205,6 @@ export async function ensureSpotExists(spotId) {
   if (spot) return spot
   const routeStop = await getSpotFromRouteStops(spotId)
   if (routeStop) return routeStop
-  // 找不到则构造虚拟数据兜底
   return {
     id: Number(spotId),
     name: '途径点',
@@ -221,4 +220,19 @@ export async function ensureSpotExists(spotId) {
     weather: { condition: '晴', temp: 22 },
     crowdLevel: '一般'
   }
+}
+
+export async function updateSpotAddress(spotId, address) {
+  const spot = await getSpotById(spotId)
+  if (!spot) return null
+  
+  const detail = toJson(spot.detail_json, {})
+  detail.address = address
+  
+  await getDb().query(
+    'UPDATE spots SET detail_json = ? WHERE id = ?',
+    [JSON.stringify(detail), spotId]
+  )
+  
+  return { ...spot, detail_json: JSON.stringify(detail), address }
 }

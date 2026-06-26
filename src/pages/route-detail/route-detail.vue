@@ -129,7 +129,7 @@ function spotMetaLine(s: RouteSpotItem) {
 function goSpotDetail(s: RouteSpotItem) {
   const sid = s.spotId
   if (sid === undefined || sid === null) {
-    uni.showToast({ title: '该途经点无景点 ID', icon: 'none' })
+    uni.showToast({ title: '该为官方推荐景点', icon: 'none' })
     return
   }
   uni.navigateTo({
