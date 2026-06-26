@@ -6,6 +6,7 @@ const router = new Router({ prefix: '/api/v1/user' })
 
 router.use(authMiddleware)
 router.get('/profile', getUserProfile)
+router.put('/profile', updateUserProfile)
 router.patch('/profile', updateUserProfile)
 
 export default router

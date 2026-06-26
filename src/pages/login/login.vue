@@ -10,10 +10,7 @@
         class="wechat-btn"
         :loading="loading"
         :disabled="loading"
-        open-type="getUserProfile"
-        lang="zh_CN"
-        @getuserprofile="handleGetUserProfile"
-        @tap="handleTap"
+        @tap="handleLogin"
       >
         <text class="btn-icon">微信</text>
         <text class="btn-text">{{ loading ? '登录中...' : '微信一键登录' }}</text>
@@ -51,36 +48,43 @@ interface UserInfo {
   avatarUrl: string
 }
 
-// 用于存储从 button 获取的用户信息
-let pendingUserInfo: UserInfo | null = null
-
-// 备用点击处理 - 使用 uni.getUserProfile
-async function handleTap() {
+// 登录处理
+async function handleLogin() {
   loading.value = true
   errorMsg.value = ''
-  
+
   try {
-    // 使用 uni.getUserProfile 获取用户信息
-    const profileResult = await new Promise<UniApp.GetUserProfileSuccessCallbackResult>((resolve, reject) => {
-      uni.getUserProfile({
-        desc: '用于完善用户资料',
-        lang: 'zh_CN',
-        success: resolve,
-        fail: reject
+    let userInfo: UserInfo = { nickName: '旅行者', avatarUrl: '' }
+
+    try {
+      // 使用 uni.getUserProfile 获取用户信息
+      const profileResult = await new Promise<UniApp.GetUserProfileSuccessCallbackResult>((resolve, reject) => {
+        uni.getUserProfile({
+          desc: '用于完善用户资料',
+          lang: 'zh_CN',
+          success: resolve,
+          fail: reject
+        })
       })
-    })
-    
-    pendingUserInfo = {
-      nickName: profileResult.userInfo.nickName || '',
-      avatarUrl: profileResult.userInfo.avatarUrl || ''
+
+      if (profileResult.userInfo) {
+        userInfo = {
+          nickName: profileResult.userInfo.nickName || '旅行者',
+          avatarUrl: profileResult.userInfo.avatarUrl || ''
+        }
+        console.log('获取到微信头像:', userInfo)
+      }
+    } catch (profileError: any) {
+      // 模拟器中 uni.getUserProfile 可能失败，使用默认头像
+      console.warn('获取微信头像失败，使用默认头像:', profileError?.errMsg || profileError)
     }
-    
+
     // 获取微信登录 code
     const code = await doLogin()
-    
+
     // 调用后端登录接口
-    await wechatLoginWithCode(code, pendingUserInfo)
-    
+    await wechatLoginWithCode(code, userInfo)
+
     uni.switchTab({ url: '/pages/explore/explore' })
   } catch (error: any) {
     // 用户取消或拒绝授权
@@ -91,37 +95,6 @@ async function handleTap() {
     }
   } finally {
     loading.value = false
-    pendingUserInfo = null
-  }
-}
-
-async function handleGetUserProfile(e: any) {
-  loading.value = true
-  errorMsg.value = ''
-
-  try {
-    // 从事件中获取用户信息
-    const userInfo = e.detail?.userInfo as UserInfo | undefined
-
-    if (!userInfo) {
-      // 如果用户拒绝授权，使用空字符串
-      pendingUserInfo = { nickName: '', avatarUrl: '' }
-    } else {
-      pendingUserInfo = userInfo
-    }
-
-    // 获取微信登录 code
-    const code = await doLogin()
-
-    // 调用后端登录接口
-    await wechatLoginWithCode(code, pendingUserInfo)
-
-    uni.switchTab({ url: '/pages/explore/explore' })
-  } catch (error) {
-    errorMsg.value = error instanceof Error ? error.message : '登录失败，请重试'
-  } finally {
-    loading.value = false
-    pendingUserInfo = null
   }
 }
 

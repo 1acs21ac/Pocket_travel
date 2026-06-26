@@ -62,22 +62,44 @@ export function buildPersonalizedRecommendCards(
   weatherText = ''
 ): RecommendCard[] {
   const fallbackScene = resolveSceneType(moodTags, socialIdentity, weatherText)
-  const sourceRoutes = routes.length ? routes : [{ id: fallbackScene }]
+  
+  // 当后端没有返回数据时，使用多个示例场景
+  if (!routes.length) {
+    const sceneTypes: SceneType[] = ['healing', 'social', 'creative', 'adventure', 'foodie', 'romantic']
+    return sceneTypes.map((scene, index) => {
+      const copy = sceneCopy[scene] || sceneCopy.default
+      return {
+        id: `demo-${scene}-${index}`,
+        title: copy.title,
+        subtitle: copy.subtitle,
+        cover: copy.cover,
+        goneCount: Math.floor(Math.random() * 300) + 100,
+        sceneType: scene,
+        recommendationRule: copy.rule
+      }
+    })
+  }
 
-  return sourceRoutes.map((route, index) => {
-    const sceneType = route.sceneType || (index === 0 ? fallbackScene : resolveSceneType(moodTags, socialIdentity, weatherText))
-    const copy = sceneCopy[sceneType as keyof typeof sceneCopy] || sceneCopy.default
-
-    return {
-      id: route.id,
-      title: route.title || copy.title,
-      subtitle: route.subtitle || copy.subtitle,
-      cover: route.cover || copy.cover,
-      goneCount: route.goneCount ?? 0,
-      sceneType,
-      recommendationRule: copy.rule
+  // 为每个路线创建多个情绪风格的卡片
+  const sceneTypes: SceneType[] = ['healing', 'social', 'rainy', 'default']
+  const cards: RecommendCard[] = []
+  
+  for (const route of routes) {
+    for (const scene of sceneTypes) {
+      const copy = sceneCopy[scene] || sceneCopy.default
+      cards.push({
+        id: `${route.id}-${scene}`,
+        title: route.title || copy.title,
+        subtitle: copy.subtitle,
+        cover: route.cover || copy.cover,
+        goneCount: route.goneCount ?? Math.floor(Math.random() * 300) + 100,
+        sceneType: scene,
+        recommendationRule: copy.rule
+      })
     }
-  })
+  }
+  
+  return cards
 }
 
 /**

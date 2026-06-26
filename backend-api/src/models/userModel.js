@@ -30,7 +30,7 @@ export async function updateUserInterestTags(userId, interestTags) {
 }
 
 export async function updateUserAvatar(userId, nickname, avatarUrl) {
-  if (!nickname && !avatarUrl) return
+  if (nickname === undefined && avatarUrl === undefined) return
   const fields = []
   const values = []
   if (nickname !== undefined) {

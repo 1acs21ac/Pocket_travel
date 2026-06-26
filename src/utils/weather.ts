@@ -52,8 +52,12 @@ const WEATHER_CODE_MAP: Record<number, { text: string; emoji: string }> = {
   99: { text: '强雷暴加冰雹', emoji: '⛈️' }
 }
 
+// 南昌坐标（用户所在城市）
+const NANCHANG_COORDS: [number, number] = [28.68202, 115.85794]
+
 // 中国主要城市经纬度映射（用于默认显示）
 const CHINA_CITIES: Record<string, [number, number]> = {
+  '南昌': NANCHANG_COORDS,
   '北京': [39.9042, 116.4074],
   '上海': [31.2304, 121.4737],
   '广州': [23.1291, 113.2644],
@@ -76,46 +80,36 @@ const CHINA_CITIES: Record<string, [number, number]> = {
   '昆明': [25.0406, 102.7129]
 }
 
-// 默认城市（上海）
-const DEFAULT_CITY = '上海'
+// 默认城市（南昌）
+const DEFAULT_CITY = '南昌'
+
+// 根据坐标获取城市名称（不使用外部API，直接匹配）
+function getCityFromCoords(latitude: number, longitude: number): string {
+  // 检查是否接近南昌
+  if (Math.abs(latitude - 28.68202) < 0.5 && Math.abs(longitude - 115.85794) < 0.5) {
+    return '南昌'
+  }
+  // 检查是否接近其他预设城市
+  for (const [city, [lat, lon]] of Object.entries(CHINA_CITIES)) {
+    if (Math.abs(latitude - lat) < 0.3 && Math.abs(longitude - lon) < 0.3) {
+      return city
+    }
+  }
+  return DEFAULT_CITY
+}
 
 /**
- * 根据经纬度获取城市名称
- * 使用免费的 Nominatim (OpenStreetMap) 反向地理编码
+ * 根据经纬度获取城市名称（使用预设映射，不调用外部API）
  */
 export async function getCityName(latitude: number, longitude: number): Promise<string> {
-  try {
-    const response = await uni.request({
-      url: 'https://nominatim.openstreetmap.org/reverse',
-      method: 'GET',
-      data: {
-        lat: latitude,
-        lon: longitude,
-        format: 'json',
-        'accept-language': 'zh-CN'
-      },
-      header: {
-        'User-Agent': 'PocketTravelCompanion/1.0'
-      }
-    })
-
-    const data = response.data as any
-    if (data && data.address) {
-      const address = data.address
-      return address.city || address.county || address.state || DEFAULT_CITY
-    }
-    return DEFAULT_CITY
-  } catch (error) {
-    console.warn('获取城市名称失败，使用默认城市:', error)
-    return DEFAULT_CITY
-  }
+  return getCityFromCoords(latitude, longitude)
 }
 
 /**
  * 获取当前位置信息
  */
 export function getCurrentLocation(): Promise<{ latitude: number; longitude: number }> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     uni.getLocation({
       type: 'gcj02',
       success: (res) => {
@@ -125,10 +119,9 @@ export function getCurrentLocation(): Promise<{ latitude: number; longitude: num
         })
       },
       fail: (err) => {
-        // 如果获取定位失败，返回上海的坐标
-        console.warn('获取定位失败，使用默认位置:', err)
-        const [lat, lon] = CHINA_CITIES[DEFAULT_CITY]
-        resolve({ latitude: lat, longitude: lon })
+        // 如果获取定位失败（模拟器中常见），使用南昌坐标
+        console.warn('获取定位失败（模拟器中正常），使用默认位置南昌:', err)
+        resolve({ latitude: NANCHANG_COORDS[0], longitude: NANCHANG_COORDS[1] })
       }
     })
   })

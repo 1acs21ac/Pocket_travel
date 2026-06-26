@@ -145,7 +145,56 @@ export async function importRouteByLink(ctx) {
 export async function listRoutes(ctx) {
   const userId = ctx.state.user.userId
   const routes = await getRouteList(userId)
+  
+  // 如果用户没有路线，返回官方推荐路线
+  if (!routes.length) {
+    const officialRoutes = getOfficialRecommendRoutes()
+    ok(ctx, { list: officialRoutes, isOfficial: true })
+    return
+  }
+  
   ok(ctx, { list: routes })
+}
+
+function getOfficialRecommendRoutes() {
+  return [
+    {
+      id: 'official-1',
+      title: '上海治愈系半日游',
+      subtitle: '安静散步 · 温柔补能 · 慢节奏周末',
+      source_type: 'official',
+      goneCount: 328,
+      sceneType: 'healing',
+      cover: 'https://picsum.photos/seed/healing-route/720/420'
+    },
+    {
+      id: 'official-2',
+      title: '上海社交出片路线',
+      subtitle: '咖啡车 · 滨江风 · 轻社交拍照局',
+      source_type: 'official',
+      goneCount: 217,
+      sceneType: 'social',
+      cover: 'https://picsum.photos/seed/social-route/720/420'
+    },
+    {
+      id: 'official-3',
+      title: '雨天室内打卡路线',
+      subtitle: '室内展览 · 书店 · 热饮回血',
+      source_type: 'official',
+      goneCount: 156,
+      sceneType: 'rainy',
+      cover: 'https://picsum.photos/seed/rainy-route/720/420'
+    },
+    {
+      id: 'official-4',
+      title: '周末轻量探索路线',
+      subtitle: '咖啡 · 自然 · 展览 · 轻量探索',
+      source_type: 'official',
+      goneCount: 445,
+      sceneType: 'default',
+      cover: 'https://picsum.photos/seed/default-route/720/420'
+    }
+  ]
 }
 
 export async function createRouteDirect(ctx) {

@@ -36,6 +36,7 @@ import { ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { useBeanStore } from '@/store/bean'
 import { request } from '@/utils/request'
+import { isLoggedIn, isTokenExpired } from '@/utils/auth'
 
 interface BeanLog {
   id: number | string

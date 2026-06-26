@@ -88,7 +88,7 @@ const distanceText = computed(() => {
 
 onLoad(async (options) => {
   spotId.value = String(options?.spotId || '')
-  spotName.value = String(options?.spotName || '')
+  spotName.value = decodeURIComponent(String(options?.spotName || ''))
   spotLat.value = toNumberOrNull(options?.lat)
   spotLng.value = toNumberOrNull(options?.lng)
   if (spotId.value && (spotLat.value === null || spotLng.value === null || !spotName.value)) {

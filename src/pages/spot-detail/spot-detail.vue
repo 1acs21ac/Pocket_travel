@@ -187,12 +187,50 @@ async function loadComments(spotId: string) {
 
 function flattenDetail(obj: Record<string, unknown>, prefix = ''): string[] {
   const lines: string[] = []
+  const keyMap: Record<string, string> = {
+    name: '名称',
+    description: '描述',
+    open_time: '开放时间',
+    openTime: '开放时间',
+   opentime: '开放时间',
+    closing_time: '闭园时间',
+    closeTime: '闭园时间',
+    ticket: '门票',
+    price: '价格',
+    ticket_price: '门票价格',
+    ticketPrice: '门票价格',
+    address: '地址',
+    phone: '电话',
+    telephone: '电话',
+    website: '网站',
+    rating: '评分',
+    level: '等级',
+    category: '类别',
+    area: '面积',
+    height: '海拔',
+    founded: '建成时间',
+    architect: '建筑师',
+    style: '风格',
+    capacity: '容量',
+    parking: '停车',
+    restroom: '卫生间',
+    wifi: 'WiFi',
+    food: '餐饮',
+    shop: '商店',
+    service: '服务',
+    tip: '提示',
+    best_season: '最佳季节',
+    bestTime: '最佳游览时间',
+    duration: '建议游览时长',
+    suggested_duration: '建议游览时长'
+  }
   for (const [k, v] of Object.entries(obj)) {
     const key = prefix ? `${prefix}.${k}` : k
     if (v !== null && typeof v === 'object' && !Array.isArray(v)) {
       lines.push(...flattenDetail(v as Record<string, unknown>, key))
     } else {
-      lines.push(`${key}：${String(v)}`)
+      const displayKey = keyMap[k] || key
+      lines.push(`${displayKey}：${String(v)}`)
     }
   }
   return lines

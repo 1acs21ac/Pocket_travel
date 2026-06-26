@@ -48,7 +48,7 @@ const errorText = ref('')
 
 onLoad((options) => {
   spotId.value = String(options?.spotId || '')
-  spotName.value = String(options?.spotName || '')
+  spotName.value = decodeURIComponent(String(options?.spotName || ''))
 })
 
 onShow(() => {

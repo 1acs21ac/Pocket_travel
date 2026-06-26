@@ -7,6 +7,7 @@ import beanRoutes from './beanRoutes.js'
 import shareRoutes from './shareRoutes.js'
 import docsRoutes from './docsRoutes.js'
 import userRoutes from './userRoutes.js'
+import notificationRoutes from './notificationRoutes.js'
 import { ok } from '../utils/response.js'
 
 const router = new Router()
@@ -19,6 +20,7 @@ router.use(spotRoutes.routes(), spotRoutes.allowedMethods())
 router.use(beanRoutes.routes(), beanRoutes.allowedMethods())
 router.use(shareRoutes.routes(), shareRoutes.allowedMethods())
 router.use(userRoutes.routes(), userRoutes.allowedMethods())
+router.use(notificationRoutes.routes(), notificationRoutes.allowedMethods())
 router.use(docsRoutes.routes(), docsRoutes.allowedMethods())
 
 export default router

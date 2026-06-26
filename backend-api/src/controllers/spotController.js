@@ -15,6 +15,7 @@ import { beanRule, clampBeanBalance } from '../utils/beanRule.js'
 import { getDb } from '../models/db.js'
 import { addBeanLog, claimDailyRewardTx, getBeanBalanceTx, updateBeanBalanceTx } from '../models/beanModel.js'
 import { getMoodProfile } from '../models/moodModel.js'
+import { createNotificationTx } from '../models/notificationModel.js'
 function toJson(value, fallback) {
   if (value === null || value === undefined) return fallback
   if (typeof value === 'string') {
@@ -99,6 +100,13 @@ export async function createSpotCheckin(ctx) {
     if (rewardBeans > 0) {
       await updateBeanBalanceTx(connection, userId, nextBalance)
       await addBeanLog(connection, { userId, delta: rewardBeans, reason: '打卡奖励' })
+      await createNotificationTx(connection, {
+        recipientUserId: userId,
+        notificationType: 'checkin_reward',
+        title: '豆子到账',
+        content: `你完成了景点打卡，已获得${rewardBeans}豆子。`,
+        payloadData: { checkinId, rewardBeans, spotId: spot.id, spotName: spot.name }
+      })
     }
     await connection.commit()
   } catch (error) {
@@ -141,6 +149,13 @@ export async function createSpotComment(ctx) {
     if (rewardBeans > 0) {
       await updateBeanBalanceTx(connection, userId, nextBalance)
       await addBeanLog(connection, { userId, delta: rewardBeans, reason: '评论奖励' })
+      await createNotificationTx(connection, {
+        recipientUserId: userId,
+        notificationType: 'comment_reward',
+        title: '豆子到账',
+        content: `你完成了评论，已获得${rewardBeans}豆子。`,
+        payloadData: { commentId, rewardBeans, spotId: spot.id, spotName: spot.name }
+      })
     }
     await connection.commit()
   } catch (error) {
