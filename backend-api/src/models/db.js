@@ -99,11 +99,14 @@ async function ensureSchema() {
     try {
       await pool.query(statement)
     } catch (error) {
-      // Ignore "table already exists" and "index already exists" errors
+      // Ignore errors for tables/indexes that already exist
+      // MySQL 5.7 doesn't support CREATE INDEX IF NOT EXISTS, so also ignore syntax errors for indexes
       if (
         error.code !== 'ER_TABLE_EXISTS_ERROR' &&
         error.code !== 'ER_DUP_KEYNAME' &&
-        error.code !== 'ER_FK_DUP_NAME'
+        error.code !== 'ER_FK_DUP_NAME' &&
+        !error.message.includes('Duplicate key name') &&
+        !(error.errno === 1064 && statement.toUpperCase().includes('CREATE INDEX'))
       ) {
         logger.warn(`Schema statement warning: ${error.message}`)
       }
